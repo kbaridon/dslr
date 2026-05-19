@@ -1,3 +1,5 @@
 /datasets
 /.venv
 /__pycache__
+weights.json
+houses.csv
