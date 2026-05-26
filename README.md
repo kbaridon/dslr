@@ -45,7 +45,7 @@ Then, we will do this for each houses, and we will take the result with the high
 Here are all the bonuses done:
 
 - Add more fields to describe.py: unique, top, freq and dtype.
-- Stochastic gradient descent
-- Batch GD (default)
-- mini-batch GD
-- Early stopping
+- Stochastic gradient descent (= take one data line at each iteration)
+- Batch GD (default) (= take all the data at each iteration)
+- mini-batch GD (= take a small part of the data at each iteration)
+- Early stopping (when loss doesn't really increase)
