@@ -1,7 +1,6 @@
 /datasets
 /.venv
 /__pycache__
-/test
 weights.json
 houses.csv
 histo.png
