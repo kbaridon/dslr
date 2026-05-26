@@ -16,18 +16,22 @@ def load_csv(path: str) -> pd.DataFrame:
 
 def print_infos(dataset: pd.DataFrame):
     num_dataset = dataset.select_dtypes(include='number')
-    stats_df = pd.DataFrame(columns=["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"])
+    stats_df = pd.DataFrame(columns=["Count", "unique", "top", "freq", "Mean", "Std", "Min", "25%", "50%", "75%", "Max", "dtype"])
     for name_col in num_dataset:
         column = num_dataset[name_col]
         stats_df.loc[name_col] = {
             "Count": my_count(column),
+            "unique": my_unique(column),
+            "top": my_top(column),
+            "freq": my_freq(column),
             "Mean": my_mean(column),
             "Std": my_std(column),
             "Min": my_min(column),
             "25%": my_quantile(column, 0.25),
             "50%": my_quantile(column, 0.50),
             "75%": my_quantile(column, 0.75),
-            "Max": my_max(column)
+            "Max": my_max(column),
+            "dtype": type(column.iloc[0]).__name__
         }
     print(stats_df.T)
 

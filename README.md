@@ -40,3 +40,12 @@ Then, we will do this for each houses, and we will take the result with the high
 
 ![Gradient Descent](https://editor.analyticsvidhya.com/uploads/97106gd4.jpeg)
 
+# Bonuses
+
+Here are all the bonuses done:
+
+- Add more fields to describe.py: unique, top, freq and dtype.
+- Stochastic gradient descent
+- Batch GD (default)
+- mini-batch GD
+- Early stopping

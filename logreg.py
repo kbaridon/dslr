@@ -9,12 +9,13 @@ HOUSES = ["Gryffindor", "Hufflepuff", "Ravenclaw", "Slytherin"]
 class LogisticRegressionOvR:
 
 
-    def __init__(self, lr=0.1, n_epochs=10000, epsilon=0.001, patience=10):
+    def __init__(self, lr=0.1, n_epochs=10000, epsilon=0.001, patience=10, optimizer="classic"):
         self.lr       = lr
         self.n_epochs = n_epochs
         self.epsilon  = epsilon
         self.patience = patience
         self.weights  = {}
+        self.optimizer = optimizer
         self.mean     = None
         self.std      = None
         self.columns  = None
@@ -50,7 +51,7 @@ class LogisticRegressionOvR:
         return min(recent) > best_before - self.epsilon
 
 
-    def _train_one(self, X: np.ndarray, y: np.ndarray, label: str) -> np.ndarray:
+    def _train_one(self, X: np.ndarray, y: np.ndarray, label: str, batch_size: int) -> np.ndarray:
         """Gradient descent with early stopping for one binary classifier."""
         m, n = X.shape
         theta = np.zeros(n + 1)
@@ -58,11 +59,16 @@ class LogisticRegressionOvR:
         losses = []
 
         for epoch in range(1, self.n_epochs + 1):
-            y_hat = self._sigmoid(X_bias.dot(theta))
-            gradient = (1 / m) * np.dot(X_bias.T, (y_hat - y))
-            theta -= self.lr * gradient
+            indices = np.random.permutation(m)
+            X_s, y_s = X_bias[indices], y[indices]
 
-            loss = self._loss(y, y_hat)
+            for start in range(0, m, batch_size):
+                Xb = X_s[start:start + batch_size]
+                yb = y_s[start:start + batch_size]
+                y_hat = self._sigmoid(Xb.dot(theta))
+                theta -= self.lr * (1 / len(yb)) * Xb.T.dot(y_hat - yb)
+
+            loss = self._loss(y, self._sigmoid(X_bias.dot(theta)))
             losses.append(loss)
 
             if epoch % 200 == 0:
@@ -86,7 +92,12 @@ class LogisticRegressionOvR:
         for house in HOUSES:
             print(f"\n-- Training {house} vs Rest --")
             y = (df["Hogwarts House"] == house).astype(int).values
-            self.weights[house] = self._train_one(X_std, y, house)
+            if (self.optimizer == "sgd"):
+                self.weights[house] = self._train_one(X_std, y, house, 1)
+            elif (self.optimizer == "mini-batch"):
+                self.weights[house] = self._train_one(X_std, y, house, 32)
+            else:
+                self.weights[house] = self._train_one(X_std, y, house, len(X_std))
 
 
     def save_model(self, path: str):

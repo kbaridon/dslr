@@ -63,3 +63,47 @@ def my_max(col) -> float:
         if maxi < value:
             maxi = value
     return maxi
+
+
+def my_unique(col) -> float:
+    col = col.dropna()
+    if (len(col) == 0):
+        return float('nan')
+    uniques = []
+    nb = 0
+    for value in col:
+        if value not in uniques:
+            uniques.append(value)
+            nb += 1
+    return nb
+
+
+def my_top(col):
+    col = col.dropna()
+    if len(col) == 0:
+        return float('nan')
+    top_value = col.iloc[0]
+    top_count = 0
+    for value1 in col:
+        count = 0
+
+        for value2 in col:
+            if value1 == value2:
+                count += 1
+        if count > top_count:
+            top_count = count
+            top_value = value1
+    return top_value
+    
+
+def my_freq(col) -> float:
+    col = col.dropna()
+    if (len(col) == 0):
+        return float('nan')
+    top = my_top(col)
+    nb = 0
+    for value in col:
+        if (value == top):
+            nb += 1
+    return nb
+    
