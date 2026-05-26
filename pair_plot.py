@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import argparse
 import sys
 import numpy as np
-import random
 
 
 def print_pairplot(dataset):
@@ -54,6 +53,7 @@ def print_pairplot(dataset):
 
     fig.suptitle("Pair Plot Matrix - Hogwarts Subjects", fontsize=20, fontweight='bold', y=0.98)
     
+    plt.savefig('pair.png')
     plt.show()
 
 

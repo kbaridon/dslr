@@ -34,6 +34,7 @@ def print_histo(dataset):
 
     plt.tight_layout()
     plt.subplots_adjust(top=0.90)
+    plt.savefig('histo.png')
     plt.show()
 
 

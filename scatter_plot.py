@@ -17,7 +17,9 @@ def print_scatter(dataset):
     }
 
     corr_matrix = data.corr().abs()
-    np.fill_diagonal(corr_matrix.values, np.nan)
+    mask = np.ones(corr_matrix.shape, dtype=bool)
+    np.fill_diagonal(mask, False)
+    corr_matrix = corr_matrix.where(mask)
 
     sim_feat1, sim_feat2 = corr_matrix.unstack().idxmax()
     print(f"✅ Features les plus similaires : {sim_feat1} & {sim_feat2}")
@@ -47,6 +49,7 @@ def print_scatter(dataset):
         ax.grid(True, linestyle='--', alpha=0.6)
 
     plt.tight_layout()
+    plt.savefig('scatter.png')
     plt.show()
 
 
